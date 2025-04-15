@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: const MyHomePage(title: 'Interactive Image Viewer'),
-       debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -35,6 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final int _zoomStep = 10;
   int _zoom = 100;
   double _brightness = 0.0;
+  bool _isGrayscale = false;
 
   void handleBrightnessChange(double value) {
     setState(() {
@@ -53,6 +54,12 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       int newValue = _zoom - _zoomStep;
       if (!(newValue < _minZoom)) _zoom = newValue;
+    });
+  }
+
+  void _toggleGrayscale(bool value) {
+    setState(() {
+      _isGrayscale = value;
     });
   }
 
@@ -127,32 +134,55 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Column(children: [
         ColorFiltered(
-          colorFilter: ColorFilter.matrix([
-            1 + _brightness,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1 + _brightness,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1 + _brightness,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-          ]),
+          colorFilter: ColorFilter.matrix(_isGrayscale
+              ? [
+                  0.2126,
+                  0.7152,
+                  0.0722,
+                  0,
+                  0,
+                  0.2126,
+                  0.7152,
+                  0.0722,
+                  0,
+                  0,
+                  0.2126,
+                  0.7152,
+                  0.0722,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                ]
+              : [
+                  1 + _brightness,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1 + _brightness,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1 + _brightness,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  1,
+                  0,
+                ]),
           child: const Image(
             image: AssetImage('assets/image.jpg'),
             width: 320,
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
           ),
         ),
         SliderExample(
@@ -171,6 +201,12 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
                 onPressed: _incrementZoom, child: const Icon(Icons.add))
           ],
+        ),
+        // Contrôle noir et blanc
+        SwitchListTile(
+          title: const Text("Mode noir et blanc"),
+          value: _isGrayscale,
+          onChanged: _toggleGrayscale,
         ),
       ]),
     );
