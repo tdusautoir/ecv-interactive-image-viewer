@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: const MyHomePage(title: 'Interactive Image Viewer'),
+       debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -73,6 +74,58 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _showInfoBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Informations sur l'image",
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12.0),
+              Text("Titre:"),
+              const SizedBox(height: 8.0),
+              Text("Description:"),
+              const SizedBox(height: 8.0),
+              Text("Source:"),
+              const Divider(),
+              const Text(
+                "Instructions d'utilisation:",
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              const Text(
+                  "• Utilisez les boutons + et - pour zoomer et dézoomer"),
+              const Text("• Ajustez la luminosité avec le curseur"),
+              const Text("• Activez le mode noir et blanc avec l'interrupteur"),
+              const Text(
+                  "• Appuyez sur 'Réinitialiser' pour restaurer les paramètres par défaut"),
+              const SizedBox(height: 16.0),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("Fermer"),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -86,10 +139,15 @@ class _MyHomePageState extends State<MyHomePage> {
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text("Visionneuse d'Image"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            onPressed: _showInfoBottomSheet,
+          ),
+        ],
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
