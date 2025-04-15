@@ -34,11 +34,11 @@ class _MyHomePageState extends State<MyHomePage> {
   final int _maxZoom = 250;
   final int _zoomStep = 10;
   int _zoom = 100;
-  double luminosity = 100;
+  double _brightness = 0.0;
 
-  void handleLuminosityChange(double value) {
+  void handleBrightnessChange(double value) {
     setState(() {
-      luminosity = value;
+      _brightness = value;
     });
   }
 
@@ -126,13 +126,38 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: Column(children: [
-        const Image(
-          image: AssetImage('assets/image.jpg'),
-          width: 320,
+        ColorFiltered(
+          colorFilter: ColorFilter.matrix([
+            1 + _brightness,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1 + _brightness,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1 + _brightness,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+          ]),
+          child: const Image(
+            image: AssetImage('assets/image.jpg'),
+            width: 320,
+            fit: BoxFit.cover,
+          ),
         ),
         SliderExample(
-          value: luminosity,
-          onChanged: handleLuminosityChange,
+          value: _brightness,
+          onChanged: handleBrightnessChange,
         ),
         Wrap(
           spacing: 50,
@@ -167,12 +192,14 @@ class _SliderExampleState extends State<SliderExample> {
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
-      Text(widget.value.toStringAsFixed(0)),
       Slider(
         value: widget.value,
-        max: 100,
+        min: -0.5,
+        max: 0.5,
+        label: widget.value.round().toString(),
         onChanged: widget.onChanged,
       ),
+      Text('${(widget.value * 100).toStringAsFixed(0)}%'),
     ]);
   }
 }
