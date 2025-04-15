@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Interactive Image Viewer'),
     );
   }
 }
@@ -54,16 +54,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final int _minZoom = 50;
+  final int _maxZoom = 250;
+  final int _zoomStep = 10;
+  int _zoom = 100;
 
-  void _incrementCounter() {
+  void _incrementZoom() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      int newValue = _zoom + _zoomStep;
+      if (!(newValue > _maxZoom)) _zoom = newValue;
+    });
+  }
+
+  void _decrementZoom() {
+    setState(() {
+      int newValue = _zoom - _zoomStep;
+      if (!(newValue < _minZoom)) _zoom = newValue;
     });
   }
 
@@ -104,19 +110,23 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            const Text('Zoom :'),
+            Wrap(
+              spacing: 50,
+              children: [
+                ElevatedButton(
+                    onPressed: _decrementZoom, child: const Icon(Icons.remove)),
+                Text(
+                  '$_zoom %',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+                ElevatedButton(
+                    onPressed: _incrementZoom, child: const Icon(Icons.add))
+              ],
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
