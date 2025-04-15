@@ -132,90 +132,118 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      body: Column(children: [
-        SizedOverflowBox(
-            size: const Size(300, 300),
-            child: ClipRect(
-                child: Center(
-                    child: ColorFiltered(
-                        colorFilter: ColorFilter.matrix(_isGrayscale
-                            ? [
-                                0.2126 * (1 + _brightness),
-                                0.7152 * (1 + _brightness),
-                                0.0722 * (1 + _brightness),
-                                0,
-                                0,
-                                0.2126 * (1 + _brightness),
-                                0.7152 * (1 + _brightness),
-                                0.0722 * (1 + _brightness),
-                                0,
-                                0,
-                                0.2126 * (1 + _brightness),
-                                0.7152 * (1 + _brightness),
-                                0.0722 * (1 + _brightness),
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                1,
-                                0,
-                              ]
-                            : [
-                                1 + _brightness,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                1 + _brightness,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                1 + _brightness,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                1,
-                                0,
-                              ]),
-                        child: Transform.scale(
-                          scale: _zoom / 100,
-                          child: const Image(
-                            image: AssetImage('assets/image.jpg'),
-                            width: 320,
-                            height: 320,
-                            fit: BoxFit.contain,
-                          ),
-                        ))))),
-        SliderExample(
-          value: _brightness,
-          onChanged: handleBrightnessChange,
-        ),
-        Wrap(
-          spacing: 50,
-          children: [
-            ElevatedButton(
-                onPressed: _decrementZoom, child: const Icon(Icons.remove)),
-            Text(
-              '$_zoom %',
-              style: Theme.of(context).textTheme.headlineMedium,
+      body: Column(
+        children: [
+          Expanded(
+            child: SizedOverflowBox(
+              size: const Size(300, 300),
+              child: ClipRect(
+              child: Center(
+                child: ColorFiltered(
+                  colorFilter: ColorFilter.matrix(_isGrayscale
+                      ? [
+                          0.2126 * (1 + _brightness),
+                          0.7152 * (1 + _brightness),
+                          0.0722 * (1 + _brightness),
+                          0,
+                          0,
+                          0.2126 * (1 + _brightness),
+                          0.7152 * (1 + _brightness),
+                          0.0722 * (1 + _brightness),
+                          0,
+                          0,
+                          0.2126 * (1 + _brightness),
+                          0.7152 * (1 + _brightness),
+                          0.0722 * (1 + _brightness),
+                          0,
+                          0,
+                          0,
+                          0,
+                          0,
+                          1,
+                          0,
+                        ]
+                      : [
+                          1 + _brightness,
+                          0,
+                          0,
+                          0,
+                          0,
+                          0,
+                          1 + _brightness,
+                          0,
+                          0,
+                          0,
+                          0,
+                          0,
+                          1 + _brightness,
+                          0,
+                          0,
+                          0,
+                          0,
+                          0,
+                          1,
+                          0,
+                        ]),
+                  child: Transform.scale(
+                    scale: _zoom / 100,
+                    child: const Image(
+                      image: AssetImage('assets/image.jpg'),
+                      width: 320,
+                      height: 320,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              ),
             ),
-            ElevatedButton(
-                onPressed: _incrementZoom, child: const Icon(Icons.add))
-          ],
-        ),
-        // Contrôle noir et blanc
-        SwitchListTile(
-          title: const Text("Mode noir et blanc"),
-          value: _isGrayscale,
-          onChanged: _toggleGrayscale,
-        ),
-      ]),
+          ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              // color: Colors.grey,
+              border: Border.all(color: Colors.grey),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0),
+              ),
+            ),
+            child: Column(
+              children: [
+                SliderExample(
+                  value: _brightness,
+                  onChanged: handleBrightnessChange,
+                ),
+                const Divider(),
+                Wrap(
+                  spacing: 50,
+                  children: [
+                    ElevatedButton(
+                      onPressed: _decrementZoom,
+                      child: const Icon(Icons.remove),
+                    ),
+                    Text(
+                      '$_zoom %',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    ElevatedButton(
+                      onPressed: _incrementZoom,
+                      child: const Icon(Icons.add),
+                    ),
+                  ],
+                ),
+                const Divider(),
+                SwitchListTile(
+                  title: const Text("Mode noir et blanc"),
+                  value: _isGrayscale,
+                  onChanged: _toggleGrayscale,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
